@@ -11,6 +11,7 @@ Processi:
 - Database Redis
 - 3 x Ricevitori
 - 1 x RD
+- 1 x Web server
 
 Nodo WORKER1
 Processi:
