@@ -5,39 +5,22 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: bid098/web-server:latest
+
 jobs:
-  build-and-push:
+  publish:
+    name: publish image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-    - name: Check Out Repo
-      uses: actions/checkout@v3
-
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ghcr.io/ko-web-server/node-app:${{ github.sha }}
-        # Puoi aggiungere altre tag qui, ad esempio per versioni o latest
-
-    - name: Build and push Docker image (with build-args)
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        file: ./web-server/Dockerfile
-        push: true
-        tags: ghcr.io/ko-web-server/node-app:${{ github.sha }}
-        build-args: |
-          NODE_VERSION=${{ env.NODE_VERSION }}
+        - uses: actions/checkout@v3
+        - name: Login
+          run: |
+            echo ${{ secrets.TOKEN }} | docker login ghcr.io -u Bid098 --password-stdin
+        - name: Build and Publish
+          run: |
+            docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    
