@@ -7,7 +7,9 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bid098/web-server:latest
+  WEB_SERVER_IMAGE_NAME: bid098/web-server:latest
+  RANDOM_GENERATOR_IMAGE_NAME: bid098/random-generator:latest
+  RECIEVER_IMAGE_NAME: bid098/reciever:latest
 
 jobs:
   publish:
@@ -19,8 +21,16 @@ jobs:
         - name: Login
           run: |
             echo ${{ secrets.TOKEN }} | docker login ghcr.io -u Bid098 --password-stdin
-        - name: Build and Publish
+        - name: Build and Publish Web server Image Container
           run: |
-            docker build ./web-server/ --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            docker build ./web-server/ --tag ${{ env.REGISTRY }}/${{ env.WEB_SERVER_IMAGE_NAME }}
+            docker push ${{ env.REGISTRY }}/${{ env.WEB_SERVER_IMAGE_NAME }}
+        - name: Build and Publish Random Generator Image Container
+          run: |
+            docker build ./random-generator/ --tag ${{ env.REGISTRY }}/${{ env.RANDOM_GENERATOR_IMAGE_NAME }}
+            docker push ${{ env.REGISTRY }}/${{ env.RANDOM_GENERATOR_IMAGE_NAME }}
+        - name: Build and Publish Reciever Image Container
+          run: |
+            docker build ./random-generator/ --tag ${{ env.REGISTRY }}/${{ env.RECIEVER_IMAGE_NAME }}
+            docker push ${{ env.REGISTRY }}/${{ env.RECIEVER_IMAGE_NAME }}
     
