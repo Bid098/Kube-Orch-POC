@@ -1,0 +1,15 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple web server page</title>
+</head>
+<body>
+    <span id="sp"></span>
+    <script>
+        setInterval(() => {
+            fetch("/getdata", {method:"POST"}).then(result => {if(result.ok) return result.json()}).then((body) => document.getElementById("sp").innerHTML = JSON.stringify(body));
+        }, 3000);
+    </script>
+</body>
+</html>
